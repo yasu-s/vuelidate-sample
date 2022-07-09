@@ -4,18 +4,14 @@ import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 
 const state = reactive({
-  firstName: 'Bob',
-  lastName: 'Goto',
-  age: 20 as number | null,
+  name: 'Goto',
 })
 
 const rules = {
-  firstName: { required },
-  lastName: { required },
-  age: { required },
+  name: { required },
 }
 
-const v$ = useVuelidate(rules, state)
+const v$ = useVuelidate(rules, state, { $lazy: true, $autoDirty: false })
 
 function validate() {
   v$.value.$validate()
@@ -26,9 +22,7 @@ function resetValidate() {
 }
 
 function clear() {
-  state.firstName = ''
-  state.lastName = ''
-  state.age = null
+  state.name = ''
   v$.value.$reset()
 }
 </script>
@@ -37,20 +31,8 @@ function clear() {
   <div>
     <form>
       <div>
-        firstName: <input v-model="state.firstName" type="text" />
-        <div v-for="error of v$.firstName.$errors" class="error-msg" :ke="error.$uid">
-          {{ error.$message }}
-        </div>
-      </div>
-      <div>
-        lastName: <input v-model="state.lastName" type="text" />
-        <div v-for="error of v$.lastName.$errors" class="error-msg" :ke="error.$uid">
-          {{ error.$message }}
-        </div>
-      </div>
-      <div>
-        age: <input v-model="state.age" type="number" />
-        <div v-for="error of v$.age.$errors" class="error-msg" :ke="error.$uid">
+        firstName: <input v-model="state.name" type="text" />
+        <div v-for="error of v$.name.$errors" class="error-msg" :ke="error.$uid">
           {{ error.$message }}
         </div>
       </div>
