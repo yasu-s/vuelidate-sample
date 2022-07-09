@@ -31,7 +31,7 @@ function clear() {
   <div>
     <form>
       <div>
-        firstName: <input v-model="state.name" type="text" />
+        Name: <input v-model="state.name" type="text" />
         <div v-for="error of v$.name.$errors" class="error-msg" :ke="error.$uid">
           {{ error.$message }}
         </div>
