@@ -36,5 +36,6 @@ module.exports = {
       },
     ],
     'vue/component-api-style': ['error', ['script-setup']],
+    'vue/require-v-for-key': 'off',
   },
 }
