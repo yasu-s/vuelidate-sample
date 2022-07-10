@@ -53,8 +53,8 @@ export function useCustomVuelidate<
     setErrors()
   }
 
-  const setExternalResults = (value: Record<string, string[]>) => {
-    $externalResults.value = value
+  const setExternalResults = (value: Partial<Record<keyof T | 'server', string[]>>) => {
+    $externalResults.value = value as Record<string, string[]>
     setErrors()
   }
 
