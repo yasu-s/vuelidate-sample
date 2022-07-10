@@ -1,38 +1,40 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import useVuelidate from '@vuelidate/core'
+import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 
+/** 入力Form */
 const state = reactive({
-  firstName: 'Bob',
-  lastName: 'Goto',
+  name: 'Goto',
 })
-const $externalResults = ref({})
 
+/** バリデーションルール */
 const rules = {
-  firstName: { required },
-  lastName: { required },
+  name: { required },
 }
+
+/** 外部エラー */
+const $externalResults = ref({})
 
 const v$ = useVuelidate(rules, state, { $externalResults })
 
+/** バリデーション */
 function validate() {
   v$.value.$validate()
 }
 
+/** バリデーションリセット */
 function resetValidate() {
-  v$.value.$reset()
-}
-
-function clear() {
-  state.firstName = ''
-  state.lastName = ''
   v$.value.$clearExternalResults()
   v$.value.$reset()
 }
 
-function addError() {
-  $externalResults.value = { firstName: ['error1'] }
+/** externalResults追加 */
+function addExternalResults() {
+  $externalResults.value = {
+    // keyはstateと同様のものを指定する
+    name: ['externalResults error'],
+  }
 }
 </script>
 
@@ -40,21 +42,8 @@ function addError() {
   <div>
     <form>
       <div>
-        <ul>
-          <li v-for="error of v$.$errors" class="error-msg" :ke="error.$uid">
-            {{ error.$message }}
-          </li>
-        </ul>
-      </div>
-      <div>
-        firstName: <input v-model="state.firstName" type="text" />
-        <div v-for="error of v$.firstName.$errors" class="error-msg" :ke="error.$uid">
-          {{ error.$message }}
-        </div>
-      </div>
-      <div>
-        lastName: <input v-model="state.lastName" type="text" />
-        <div v-for="error of v$.lastName.$errors" class="error-msg" :ke="error.$uid">
+        name: <input v-model="state.name" type="text" />
+        <div v-for="error of v$.name.$errors" class="error-msg" :ke="error.$uid">
           {{ error.$message }}
         </div>
       </div>
@@ -62,18 +51,12 @@ function addError() {
     <div>
       <button @click="validate()">validate</button>
       <button @click="resetValidate()">validate reset</button>
-      <button @click="clear()">clear</button>
-      <button @click="addError()">addError</button>
+      <button @click="addExternalResults()">addExternalResults</button>
     </div>
   </div>
 </template>
 
 <style>
-#app {
-  padding: 2rem;
-  font-weight: normal;
-}
-
 .error-msg {
   color: red;
 }
