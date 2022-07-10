@@ -1,17 +1,20 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 
 const state = reactive({
-  name: 'Goto',
+  firstName: 'Bob',
+  lastName: 'Goto',
 })
+const $externalResults = ref({})
 
 const rules = {
-  name: { required },
+  firstName: { required },
+  lastName: { required },
 }
 
-const v$ = useVuelidate(rules, state, { $lazy: true, $autoDirty: false })
+const v$ = useVuelidate(rules, state, { $externalResults })
 
 function validate() {
   v$.value.$validate()
@@ -22,8 +25,14 @@ function resetValidate() {
 }
 
 function clear() {
-  state.name = ''
+  state.firstName = ''
+  state.lastName = ''
+  v$.value.$clearExternalResults()
   v$.value.$reset()
+}
+
+function addError() {
+  $externalResults.value = { firstName: ['error1'] }
 }
 </script>
 
@@ -31,8 +40,21 @@ function clear() {
   <div>
     <form>
       <div>
-        Name: <input v-model="state.name" type="text" />
-        <div v-for="error of v$.name.$errors" class="error-msg" :ke="error.$uid">
+        <ul>
+          <li v-for="error of v$.$errors" class="error-msg" :ke="error.$uid">
+            {{ error.$message }}
+          </li>
+        </ul>
+      </div>
+      <div>
+        firstName: <input v-model="state.firstName" type="text" />
+        <div v-for="error of v$.firstName.$errors" class="error-msg" :ke="error.$uid">
+          {{ error.$message }}
+        </div>
+      </div>
+      <div>
+        lastName: <input v-model="state.lastName" type="text" />
+        <div v-for="error of v$.lastName.$errors" class="error-msg" :ke="error.$uid">
           {{ error.$message }}
         </div>
       </div>
@@ -41,6 +63,7 @@ function clear() {
       <button @click="validate()">validate</button>
       <button @click="resetValidate()">validate reset</button>
       <button @click="clear()">clear</button>
+      <button @click="addError()">addError</button>
     </div>
   </div>
 </template>
