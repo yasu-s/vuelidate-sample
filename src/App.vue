@@ -13,21 +13,21 @@ const rules = {
   lastName: { required },
 }
 
-const { v$, $externalResults } = useCustomVuelidate(rules, state)
+const { v$, $externalResults, errors, validate: valid, reset } = useCustomVuelidate(rules, state)
 
 function validate() {
-  v$.value.$validate()
+  valid()
 }
 
 function resetValidate() {
-  v$.value.$reset()
+  reset()
 }
 
 function clear() {
   state.firstName = ''
   state.lastName = ''
   v$.value.$clearExternalResults()
-  v$.value.$reset()
+  reset()
 }
 
 function addError() {
@@ -39,21 +39,14 @@ function addError() {
   <div>
     <form>
       <div>
-        <ul>
-          <li v-for="error of v$.$errors" class="error-msg" :ke="error.$uid">
-            {{ error.$message }}
-          </li>
-        </ul>
-      </div>
-      <div>
         firstName: <input v-model="state.firstName" type="text" />
-        <div v-for="error of v$.firstName.$errors" class="error-msg" :ke="error.$uid">
+        <div v-for="error of errors.firstName" class="error-msg" :ke="error.$uid">
           {{ error.$message }}
         </div>
       </div>
       <div>
         lastName: <input v-model="state.lastName" type="text" />
-        <div v-for="error of v$.lastName.$errors" class="error-msg" :ke="error.$uid">
+        <div v-for="error of errors.lastName" class="error-msg" :ke="error.$uid">
           {{ error.$message }}
         </div>
       </div>
