@@ -13,7 +13,7 @@ const rules = {
   lastName: { required },
 }
 
-const { v$, $externalResults, errors, validate: valid, reset } = useCustomVuelidate(rules, state)
+const { v$, errors, validate: valid, reset, setExternalResults } = useCustomVuelidate(rules, state)
 
 function validate() {
   valid()
@@ -31,13 +31,20 @@ function clear() {
 }
 
 function addError() {
-  $externalResults.value = { firstName: ['error1'] }
+  setExternalResults({ firstName: ['error1'], server: ['error2'] })
 }
 </script>
 
 <template>
   <div>
     <form>
+      <div v-if="errors.server">
+        <ul>
+          <li v-for="error of errors.server" class="error-msg" :ke="error.$uid">
+            {{ error.$message }}
+          </li>
+        </ul>
+      </div>
       <div>
         firstName: <input v-model="state.firstName" type="text" />
         <div v-for="error of errors.firstName" class="error-msg" :ke="error.$uid">
