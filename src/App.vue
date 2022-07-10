@@ -1,20 +1,19 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
-import useVuelidate from '@vuelidate/core'
+import { reactive } from 'vue'
+import { useCustomVuelidate } from './vuelidate'
 import { required } from '@vuelidate/validators'
 
 const state = reactive({
   firstName: 'Bob',
   lastName: 'Goto',
 })
-const $externalResults = ref({})
 
 const rules = {
   firstName: { required },
   lastName: { required },
 }
 
-const v$ = useVuelidate(rules, state, { $externalResults })
+const { v$, $externalResults } = useCustomVuelidate(rules, state)
 
 function validate() {
   v$.value.$validate()
