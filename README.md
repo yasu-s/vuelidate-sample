@@ -25,6 +25,11 @@ yarn
 yarn dev
 ```
 
+## 実行結果
+
+![Vite_App](https://user-images.githubusercontent.com/2668146/178130849-e3e230f7-58f8-4c43-a2fa-3a4336d8fb8e.png)
+
+
 ## 参考URL
 
 - https://vuejs.org/
