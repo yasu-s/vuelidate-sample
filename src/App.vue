@@ -43,7 +43,7 @@ function addExternalResults() {
     <form>
       <div>
         name: <input v-model="state.name" type="text" />
-        <div v-for="error of v$.name.$errors" class="error-msg" :ke="error.$uid">
+        <div v-for="error of v$.name.$errors" class="error-msg" :key="error.$uid">
           {{ error.$message }}
         </div>
       </div>
